@@ -27,13 +27,13 @@
 
     <div class="container">
       <div class="box login-box">
-        <h1>Login</h1>
+        <h1>Sign-Up</h1>
 
-        <form action="/login" method="POST">
+        <form action="/signup" method="POST">
           <div class="field">
             <label class="label">Username</label>
             <div class="control">
-              <input type="text" class="input" />
+              <input type="text" class="input" name="username" />
             </div>
           </div>
 
@@ -41,12 +41,40 @@
             <label class="label">
               Password
             </label>
-            <input type="password" class="input" />
+            <input type="password" class="input" name="password" />
           </div>
 
           <div class="field">
             <p class="control">
-              <button class="button is-success">
+              <button type="submit" class="button is-success">
+                Sign up
+              </button>
+            </p>
+          </div>
+        </form>
+      </div>
+
+      <div class="box login-box">
+        <h1>Login</h1>
+
+        <form action="/login" method="POST">
+          <div class="field">
+            <label class="label">Username</label>
+            <div class="control">
+              <input type="text" class="input" name="username" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">
+              Password
+            </label>
+            <input type="password" class="input" name="password" />
+          </div>
+
+          <div class="field">
+            <p class="control">
+              <button type="submit" class="button is-success">
                 Login
               </button>
             </p>
