@@ -1,13 +1,52 @@
 const express = require("express");
+const session = require("express-session");
 const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 const { User } = require("./sequelize");
+const bCrypt = require("bcrypt-nodejs");
 
 let app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use(session({ secret: "potatoes", resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static("public"));
+
+passport.use(
+  "local-signup",
+  new LocalStrategy(function(req, username, password, done) {
+    let generateHash = password => {
+      return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
+    };
+    User.findOne({
+      where: {
+        username: username
+      }
+    }).then(user => {
+      if (user) {
+        return done(null, false, { message: "Username already taken." });
+      } else {
+        let hashedUserPassword = generateHash(password);
+        let data = {
+          username: username,
+          password: hashedUserPassword
+        };
+        User.create(data).then((newUser, created) => {
+          if (!newUser) {
+            return done(null, false);
+          }
+          if (newUser) {
+            return done(null, newUser);
+          }
+        });
+      }
+    });
+  })
+);
 
 app.post("/signup", (req, res) => {
   console.log(req.body);
